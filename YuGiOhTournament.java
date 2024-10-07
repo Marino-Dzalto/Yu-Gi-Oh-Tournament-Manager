@@ -9,8 +9,10 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class YuGiOhTournament {
+
     private static final int MAX_PLAYERS = 32;
     private List<Player> players = new ArrayList<>();
     private int totalRounds;
@@ -26,13 +28,9 @@ public class YuGiOhTournament {
         frame.setSize(800, 600);
         frame.setLayout(new BorderLayout());
 
-        // Gornji panel za unos podataka i sliku
-        JPanel topPanel = new JPanel(new BorderLayout());
-
-        // Panel za unos podataka o turniru
-        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Usmjerenje lijevo
+        JPanel inputPanel = new JPanel();
         JLabel tournamentLabel = new JLabel("Tournament Name:");
-        JTextField tournamentField = new JTextField(15);
+        JTextField tournamentField = new JTextField(20);
         JLabel playersLabel = new JLabel("Number of Players:");
         JTextField playersField = new JTextField(5);
         JLabel roundsLabel = new JLabel("Number of Rounds:");
@@ -47,22 +45,8 @@ public class YuGiOhTournament {
         inputPanel.add(roundsField);
         inputPanel.add(startButton);
 
-        // Dodavanje slike u gornji lijevi kut
-        try {
-            ImageIcon logoIcon = new ImageIcon("yugioh_logo.png");
-            Image image = logoIcon.getImage(); // Uzimanje originalne slike
-            Image scaledImage = image.getScaledInstance(200, 150, Image.SCALE_SMOOTH); // Skaliranje slike
-            JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
-            topPanel.add(logoLabel, BorderLayout.WEST); // Dodaj sliku u gornji lijevi kut
-        } catch (Exception e) {
-            System.out.println("Error loading image: " + e.getMessage());
-        }
+        frame.add(inputPanel, BorderLayout.NORTH);
 
-        topPanel.add(inputPanel, BorderLayout.CENTER); // Unos podataka ide u centar
-
-        frame.add(topPanel, BorderLayout.NORTH); // Gornji panel sa slikom i unosom podataka ide na vrh
-
-        // Tabela za prikaz igrača
         tableModel = new DefaultTableModel(new Object[]{"Player Name", "Wins", "Losses", "Draws", "Points"}, 0);
         playerTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(playerTable);
@@ -130,8 +114,10 @@ public class YuGiOhTournament {
             roundFrame.setLayout(new BorderLayout());
 
             List<Player> playersToPair = new ArrayList<>(players);
+
             if (playersToPair.size() % 2 != 0) {
-                Player byePlayer = playersToPair.remove(playersToPair.size() - 1);
+                ArrayList<Player> playersToPairNoByes = playersToPair.stream().filter(x -> !x.gotBYE).sorted(new PointsComparator()).collect(Collectors.toCollection(ArrayList::new));
+                Player byePlayer = playersToPairNoByes.removeLast();
                 byePlayer.updateScore("Win"); // BYE player gets a win
                 JOptionPane.showMessageDialog(roundFrame, byePlayer.name + " gets a BYE and wins this round!");
             }
@@ -216,4 +202,3 @@ public class YuGiOhTournament {
         SwingUtilities.invokeLater(YuGiOhTournament::new);
     }
 }
-

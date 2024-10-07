@@ -4,6 +4,7 @@ public class Player {
     int losses;
     int draws;
     int points;
+    boolean gotBYE;
 
     Player(String name) {
         this.name = name;
@@ -11,6 +12,7 @@ public class Player {
         this.losses = 0;
         this.draws = 0;
         this.points = 0;
+        this.gotBYE = false;
     }
 
     void updateScore(String result) {
