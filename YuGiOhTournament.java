@@ -118,8 +118,10 @@ public class YuGiOhTournament {
             if (playersToPair.size() % 2 != 0) {
                 ArrayList<Player> playersToPairNoByes = playersToPair.stream().filter(x -> !x.gotBYE).sorted(new PointsComparator()).collect(Collectors.toCollection(ArrayList::new));
                 Player byePlayer = playersToPairNoByes.removeLast();
+                byePlayer.gotBYE = true;
                 byePlayer.updateScore("Win"); // BYE player gets a win
                 JOptionPane.showMessageDialog(roundFrame, byePlayer.name + " gets a BYE and wins this round!");
+                playersToPair = playersToPairNoByes;
             }
 
             // Sort players before pairing them for the current round
