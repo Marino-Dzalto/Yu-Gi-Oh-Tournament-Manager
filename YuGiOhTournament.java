@@ -216,3 +216,4 @@ public class YuGiOhTournament {
         SwingUtilities.invokeLater(YuGiOhTournament::new);
     }
 }
+
