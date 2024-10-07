@@ -23,7 +23,7 @@ public class YuGiOhTournament {
     public YuGiOhTournament() {
         JFrame frame = new JFrame("Yu-Gi-Oh Tournament");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1200, 700);
+        frame.setSize(1300, 800);
         frame.setLayout(new BorderLayout());
 
         // Gornji panel za unos podataka i sliku
@@ -51,7 +51,7 @@ public class YuGiOhTournament {
         try {
             ImageIcon logoIcon = new ImageIcon("yugioh_logo.png");
             Image image = logoIcon.getImage(); // Uzimanje originalne slike
-            Image scaledImage = image.getScaledInstance(200, 150, Image.SCALE_SMOOTH); // Skaliranje slike
+            Image scaledImage = image.getScaledInstance(300, 150, Image.SCALE_SMOOTH); // Skaliranje slike
             JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
             topPanel.add(logoLabel, BorderLayout.WEST); // Dodaj sliku u gornji lijevi kut
         } catch (Exception e) {
@@ -130,8 +130,14 @@ public class YuGiOhTournament {
             roundFrame.setLayout(new BorderLayout());
 
             List<Player> playersToPair = new ArrayList<>(players);
+            // Provjerava se je li broj igrača neparan
             if (playersToPair.size() % 2 != 0) {
-                Player byePlayer = playersToPair.remove(playersToPair.size() - 1);
+                // Sortiranje igrača prije određivanja BYE
+                Collections.sort(playersToPair, Comparator.comparingInt((Player p) -> -p.points)
+                        .thenComparingInt(p -> -p.wins)
+                        .thenComparingInt(p -> p.losses));
+
+                Player byePlayer = playersToPair.remove(playersToPair.size() - 1); // Zadatak zadnjeg po rangu
                 byePlayer.updateScore("Win"); // BYE player gets a win
                 JOptionPane.showMessageDialog(roundFrame, byePlayer.name + " gets a BYE and wins this round!");
             }
@@ -141,6 +147,7 @@ public class YuGiOhTournament {
                     .thenComparingInt(p -> -p.wins)
                     .thenComparingInt(p -> p.losses));
 
+            // Pariraj igrače
             for (int i = 0; i < playersToPair.size(); i += 2) {
                 Player player1 = playersToPair.get(i);
                 Player player2 = playersToPair.get(i + 1);
