@@ -26,9 +26,13 @@ public class YuGiOhTournament {
         frame.setSize(800, 600);
         frame.setLayout(new BorderLayout());
 
-        JPanel inputPanel = new JPanel();
+        // Gornji panel za unos podataka i sliku
+        JPanel topPanel = new JPanel(new BorderLayout());
+
+        // Panel za unos podataka o turniru
+        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); // Usmjerenje lijevo
         JLabel tournamentLabel = new JLabel("Tournament Name:");
-        JTextField tournamentField = new JTextField(20);
+        JTextField tournamentField = new JTextField(15);
         JLabel playersLabel = new JLabel("Number of Players:");
         JTextField playersField = new JTextField(5);
         JLabel roundsLabel = new JLabel("Number of Rounds:");
@@ -43,8 +47,22 @@ public class YuGiOhTournament {
         inputPanel.add(roundsField);
         inputPanel.add(startButton);
 
-        frame.add(inputPanel, BorderLayout.NORTH);
+        // Dodavanje slike u gornji lijevi kut
+        try {
+            ImageIcon logoIcon = new ImageIcon("yugioh_logo.png");
+            Image image = logoIcon.getImage(); // Uzimanje originalne slike
+            Image scaledImage = image.getScaledInstance(200, 150, Image.SCALE_SMOOTH); // Skaliranje slike
+            JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
+            topPanel.add(logoLabel, BorderLayout.WEST); // Dodaj sliku u gornji lijevi kut
+        } catch (Exception e) {
+            System.out.println("Error loading image: " + e.getMessage());
+        }
 
+        topPanel.add(inputPanel, BorderLayout.CENTER); // Unos podataka ide u centar
+
+        frame.add(topPanel, BorderLayout.NORTH); // Gornji panel sa slikom i unosom podataka ide na vrh
+
+        // Tabela za prikaz igrača
         tableModel = new DefaultTableModel(new Object[]{"Player Name", "Wins", "Losses", "Draws", "Points"}, 0);
         playerTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(playerTable);
