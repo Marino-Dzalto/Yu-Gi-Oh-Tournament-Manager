@@ -20,6 +20,12 @@ public class YuGiOhTournament {
     private DefaultTableModel tableModel;
     private List<Player[]> matchups = new ArrayList<>();
 
+    // ostalo za dodati:
+    // (1) Drop
+    // (2) Da se nakon unosa igrača on prikaže odmah u tablicu
+    // (3) Repair
+    // (4) Spremanje svake runde u tab
+
     public YuGiOhTournament() {
         JFrame frame = new JFrame("Yu-Gi-Oh Tournament");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
